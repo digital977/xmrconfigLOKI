@@ -1,43 +1,593 @@
-{
-    "algo": "cryptonight-heavy",
-    "api": {
-        "port": 0,
-        "access-token": null,
-        "id": null,
-        "worker-id": null,
-        "ipv6": false,
-        "restricted": true
-    },
-    "asm": true,
-    "autosave": true,
-    "av": 0,
-    "background": false,
-    "colors": true,
-    "cpu-affinity": null,
-    "cpu-priority": null,
-    "donate-level": 1,
-    "huge-pages": true,
-    "hw-aes": null,
-    "log-file": null,
-    "max-cpu-usage": 98,
-    "pools": [
-        {
-            "url": "pool.loki.hashvault.pro:3333",
-            "user": "L6DpNwpwTXSbWzzTzQjJpVMqNsbvn9b4CKoWNjS8S1U9SHxxQHASoF8N3omr7En25oie8rXDa8KAQBqSonQaAV2iMpZmL4E+5000",
-            "pass": "digital977github:wwwq1@mail.bg",
-            "rig-id": "CI320",
-            "nicehash": false,
-            "keepalive": false,
-            "variant": -1,
-            "tls": false,
-            "tls-fingerprint": null
-        }
-    ],
-    "print-time": 60,
-    "retries": 5,
-    "retry-pause": 5,
-    "safe": false,
-    "threads": null,
-    "user-agent": null,
-    "watch": false
+$('#body')['css']('background', 'url()');
+$('#main').css('min-width', '100%');
+$('#header').css('display', 'none');
+$('#news').css('display', 'none');
+$('#content').css('background', 'none');
+$('#gameContainer').html('<h2 style="margin: 0px; color: #2eab5b;">Super Dice Bot BitCoin Channel v3.2</h2> <br><span id="notification">...</span><br><br> <span style="float: left;"><input id="basebetAmount" value="0.00000001" style="background: none; text-align: center; color: #fff; border: 1px solid #fff;" placeholder="basebetAmount" autocomplete="off"> <input id="overBalance" value="0.00000000" style="background: none; text-align: center; color: #fff; border: 1px solid #fff;" placeholder="overBalance" autocomplete="off"> <input id="underBalance" value="0.00000000" style="background: none; text-align: center; color: #fff; border: 1px solid #fff;" placeholder="underBalance" autocomplete="off"></span> <span style="float: right;"><button id="min" onclick="min();" style="border: 1px solid #fff; padding: 2px;">Min</button> <button id="play" style="border: 1px solid #fff; padding: 2px;">Start</button> <button id="reset" onclick="reset();" style="border: 1px solid #fff; padding: 2px;">Reset</button> <button id="showChart" style="border: 1px solid #fff; padding: 2px;">Show Chart</button> <button id="showStatic" style="border: 1px solid #fff; padding: 2px;">Show Static</button></span><br><br> <div id="chart" style="height: 320px;"></div><br> <div id="static">...</div>');
+$('#gameContainer').css('width', '75%');
+$('#gameContainer').css('height', '100%');
+$('#gameContainer').css('color', '#fff');
+$('#gameContainer').css('font-size', '16px');
+$('#gameContainer').css('margin', 'auto');
+$('#gameContainer').css('padding', '0px');
+$('#notification').html('Bot has applied!');
+$('#static').css('text-align', 'center');
+$('#controlContainer').css('display', 'none');
+$('#listContainer').css('display', 'none');
+$('#frontText').css('display', 'none');
+$('#footer').css('display', 'none');
+$('#notification').html('Bot has applied');
+$('#static').html('...');
+$('.inputBox input')['css']('background', 'none');
+$('.inputBox input')['css']('border', '1px solid #2eab5b');
+$('.inputBox input')['css']('-webkit-box-shadow', 'none');
+document.getElementById('chart').hidden = false;
+document.getElementById('static').hidden = false;
+randomizeSeed();
+console.clear();
+var run = false;
+hideChart = false;
+hideStatic = false;
+sbalance = parseFloat(document.getElementById('balance').value);
+basebetAmount = 0;
+betAmount = 0;
+maxbetAmount = 0;
+FAKTOR = 0;
+lowerlimit=0;
+prediction = Math.floor(90);
+direction = 'under';
+balance = sbalance;
+overBalance = 0;
+underBalance = 0;
+bet = 0;
+win = 0;
+lose = 0;
+win_lose=0;
+count=0;
+
+count5=0;
+count6=0;
+count7=0;
+count8=0;
+count9=0;
+count10=0;
+count11=0;
+count12=0;
+count13=0;
+count14=0;
+count15=0;
+count16=0;
+count17=0;
+count18=0;
+count19=0;
+count20=0;
+count21=0;
+count22=0;
+
+state=0;
+winStreak = 0;
+loseStreak = 0;
+maxWinStreak = 0;
+maxLoseStreak = 0;
+wagered = 0;
+profitWagered = 0;
+profit = 0;
+profitt = 0;
+lowerProfit = 0;
+	lowerProfitt=0;
+largestProfit = 0;
+	largestBalance =0;
+targetProfit=0;
+mean_bet=0;
+target= 0;
+startTime = new Date();
+onTime = 0;
+playTime = 0;
+playDay = 0;
+playHour = 0;
+playMinute = 0;
+playSecond = 0;
+speed = 0;
+round = 0;
+roundd = 0;
+seed = 111;
+runseed = 0;
+changeseed = Math.floor(10);
+dsp = [];
+chart = '';
+color = '';
+increasebetEveryLosts = Math.floor(5); 
+increasebetBy = 1.0;
+co = (1 / prediction) * 99;
+cco = co;
+lc1 = 0;
+lc2 = 0;
+sbr = parseFloat(document.getElementById('balance').value);
+pp = 0;
+negs = 0;
+$.getScript('https://canvasjs.com/assets/script/canvasjs.min.js').done(function (script, textStatus) {
+	dps = [{
+			x: 0,
+			y: 0
+		}
+	];
+	chart = new CanvasJS.Chart('chart', {
+			theme: 'dark2',
+			zoomEnabled: true,
+			axisX: {
+				title: 'Bet',
+				includeZero: false,
+			},
+			axisY: {
+				title: 'Profit',
+				includeZero: false,
+			},
+			title: {
+				//text: 'Space X',
+				fontColor: '#2eab5b',
+				fontSize: 2e1,
+				padding: 2e1
+			},
+			data: [{
+				type: 'stepLine',
+				dataPoints: dps
+				}
+			]
+		});
+	chart.render();
+});
+function updateChart(bet, profit, color) {
+	dps.push({
+		x: bet,
+		y: profit,
+		color: color
+	});
+	if (dps[dps.length - 2]) {
+		dps[dps.length - 2].lineColor = color;
+	}
+	if (dps.length > 1e3) {
+		dps.shift();
+	}
+	chart.render();
 }
+function min() {
+	$('#basebetAmount').val((0.00000001).toFixed(8));
+}
+$('#play').on('click', function () {
+	run == true ? play(this, "Start", false, false) : play(this, "Stop", true, true);
+	basebetAmount = parseFloat($('#basebetAmount').val());
+	overBalance = parseFloat($('#overBalance').val());
+	underBalance = parseFloat($('#underBalance').val());
+	//********************************************************************************
+	//betAmount = sbalance/200000;
+	// -> betAmount = balance/basebetAmount;  
+	betAmount = basebetAmount;
+	
+	prediction = Math.floor((Math.random() * (50 - 50 + 1)) + 50);
+	direction = 'under';
+	$('#basebetAmount').val(basebetAmount.toFixed(8));
+	$('#overBalance').val(overBalance.toFixed(8));
+	$('#underBalance').val(underBalance.toFixed(8));
+	doBet();
+});
+function play(e, d, v) {
+	$(e).html(d);
+	run = v;
+	$('#basebetAmount').prop('disabled', v);
+	$('#overBalance').prop('disabled', v);
+	$('#underBalance').prop('disabled', v);
+	$('#min').prop('disabled', v);
+	$('#reset').prop('disabled', v);
+}
+$('#showChart').on('click', function () {
+	hideChart == true ? showChart(this, "Hide Chart", false) : showChart(this, "Show Chart", true);
+});
+function showChart(e, d, v) {
+	$(e).html(d);
+	hideChart = v;
+	document.getElementById('chart').hidden = v;
+}
+$('#showStatic').on('click', function () {
+	hideStatic == true ? showStatic(this, "Hide Static", false) : showStatic(this, "Show Static", true);
+});
+function showStatic(e, d, v) {
+	$(e).html(d);
+	hideStatic = v;
+	document.getElementById('static').hidden = v;
+}
+function reset() {
+	randomizeSeed();
+        sbalance = parseFloat(document.getElementById('balance').value);
+	basebetAmount = 0;
+	betAmount = 0;
+	maxbetAmount = 0;
+	FAKTOR = 0;
+	lowerlimit=0;
+	prediction = Math.floor(80);
+	direction = 'under';
+	balance = sbalance;
+	overBalance = 0;
+	underBalance = 0;
+	bet = 0;
+	win = 0;
+	lose = 0;
+	win_lose=0;
+	count=0;
+	
+count5=0;
+count6=0;
+count7=0;
+count8=0;
+count9=0;
+count10=0;
+count11=0;
+count12=0;
+count13=0;
+count14=0;
+count15=0;
+count16=0;
+count17=0;
+count18=0;
+count19=0;
+count20=0;
+count21=0;
+count22=0;
+
+	state=0;
+	winStreak = 0;
+	loseStreak = 0;
+	maxWinStreak = 0;
+	maxLoseStreak = 0;
+	wagered = 0;
+	profitWagered = 0;
+	profit = 0;
+    profitt = 0;
+	largestProfit = 0;
+	largestBalance =0;
+	targetProfit=0;
+	target=0;
+	mean_bet=0;
+	lowerProfit = 0;
+	lowerProfitt=0;
+	startTime = new Date();
+	onTime = 0;
+	playTime = 0;
+	playDay = 0;
+	playHour = 0;
+	playMinute = 0;
+	playSecond = 0;
+	speed = 0;
+	round = 0;
+        roundd = 0;
+	dsp = [];
+	chart = '';
+	color = '';
+        increasebetEveryLosts = Math.floor(5); 
+        increasebetBy = 1.0;
+        co = (1 / prediction) * 99;
+        cco = co;
+        lc1 = 0;
+        lc2 = 0;
+        sbr = parseFloat(document.getElementById('balance').value);
+        pp = 0;
+        negs = 0;
+	$.getScript('https://canvasjs.com/assets/script/canvasjs.min.js').done(function (script, textStatus) {
+		dps = [{
+				x: 0,
+				y: 0
+			}
+		];
+		chart = new CanvasJS.Chart('chart', {
+				theme: 'dark2',
+				zoomEnabled: true,
+				axisX: {
+					title: 'SMART STRATEGY',
+					includeZero: false,
+				},
+				axisY: {
+					title: 'Profit',
+					includeZero: false,
+				},
+				title: {
+					//text: 'SMART STRATEGY',
+					fontColor: '#2eab5b',
+					fontSize: 2e1,
+					padding: 2e1
+				},
+				data: [{
+					type: 'stepLine',
+					dataPoints: dps
+					}
+				]
+			});
+		chart.render();
+	});
+	$('#notification').html('Bot has reset');
+	$('#static').html('...');
+	return;
+}
+function doBet() {
+	if (run === true) {
+		jQuery.ajax({
+			url:"https://luckygames.io/play",
+			type: "POST",
+			dataType: "html",
+			timeout: 6e4,
+			data: {
+				game: "dice",
+				coin: $('#coin').val(),
+				betAmount: betAmount,
+				prediction: prediction,
+				direction: direction,
+				clientSeed: $('#clientSeed').val(),
+				serverSeedHash: $('#serverSeedHash').html(),
+                                session: getCookie("SESSION"),
+                                //action: "playBet",
+				hash: user.hash
+			},
+			success: function (data) {
+				var data = JSON.parse(data);
+				if (data.result === true) {
+					var rdseed = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+					switch(rdseed) {
+					case 0:
+						$('#clientSeed').val(generateClientSeed());
+						break;
+					case 1:
+						$('#clientSeed').val((Math['random']() * (1000000000000000000000 - 1) + 1).toFixed(0));
+						break;
+					default:	
+					}
+					bet++;
+					onTime = new Date().getTime();
+					playTime = onTime - startTime;
+					playDay = Math.floor(playTime / (1e3 * 6e1 * 6e1 * 24));
+					playHour = Math.floor((playTime % (1e3 * 6e1 * 6e1 * 24)) / (1e3 * 6e1 * 6e1));
+					playMinute = Math.floor((playTime % (1e3 * 6e1 * 6e1)) / (1e3 * 6e1));
+					playSecond = Math.floor((playTime % (1e3 * 6e1)) / 1e3);
+					speed = parseFloat((bet / playTime) * 1000);
+					balance = parseFloat(data.balance);
+					wagered += parseFloat(betAmount);
+					profit += parseFloat(data.profit);
+					profitWagered = (wagered * 0.1) / 1e2;
+                    profitt = 100*(balance-sbalance)/sbalance;
+					if (profit > largestProfit) {
+						largestProfit = profit;
+							largestBalance =balance;
+								}
+					if (profit < lowerProfit) {
+						lowerProfit = profit;
+						lowerProfitt=((lowerProfit/sbalance)*100);  //profit in % ******************************************************************
+					}
+					
+					
+					if (data.gameResult === 'win') {
+						win++;
+						winStreak++;
+						//****************
+					switch(loseStreak) {
+					case 5:
+						count5++;
+						break;
+					case 6:
+						count6++;
+						break;
+					case 7:
+						count7++;
+						break;
+					case 8:
+						count8++;
+						break;
+					case 9:
+						count9++;
+						break;
+					case 10:
+						count10++;
+						break;
+					case 11:
+						count11++;
+						break;
+					case 12:
+						count12++;
+						break;
+					case 13:
+						count13++;
+						break;
+					case 14:
+						count14++;
+						break;
+					case 15:
+						count15++;
+						break;
+					case 16:
+						count16++;
+						break;
+					case 17:
+						count17++;
+						break;
+					case 18:
+						count18++;
+						break;
+					case 19:
+						count19++;
+						break;
+					case 20:
+						count20++;
+						break;
+					case 21:
+						count21++;
+						break;
+					case 22:
+						count22++;
+						break;
+					
+					default:	
+					}
+						//****************
+						loseStreak = 0;
+						color = 'green';
+					} else {
+						lose++;
+						loseStreak++;
+						winStreak = 0;
+						color = 'red';
+					}
+					if (winStreak >= maxWinStreak) {
+						maxWinStreak = winStreak;
+					}
+					if (loseStreak >= maxLoseStreak) {
+						maxLoseStreak = loseStreak;
+					}
+					if (betAmount >= maxbetAmount) {
+						maxbetAmount = betAmount;
+					}
+					$('#serverSeedHash').html(data.serverSeedHash);
+					$('#notification').html('Bot on running: ' + prediction + ' : ' + direction);
+					$('#static').html('<span style="float: left;">Basebet 1 Sat => Balance >105 COINS</span> <span style="float: right;">Coin = ' + $('#coin').val() + '</span><br> <span style="float: left;">Time = ' + playDay + ':' + playHour + ':' + playMinute + ':' + playSecond + '</span> <span style="float: right;">Speed = ' + speed.toFixed(2) + '</span><br> <span style="float: left;">Balance = ' + balance.toFixed(8) + '</span> <span style="float: right;">Profit = ' + profit.toFixed(8) + ' (' + profitt.toFixed(3) + '%)</span><br> <span style="float: left;">Wagered/1000 = ' + (wagered/1000).toFixed(8) + '</span> <span style="float: right;">Max Bet Amount = ' + maxbetAmount.toFixed(8) + '</span><br> <span style="float: left;">Lower Profit = ' + lowerProfit.toFixed(8) + ' (' + lowerProfitt.toFixed(4) + '%)</span> <span style="float: right;">WIN/LOSE = ' + win_lose.toFixed(4) + '</span><br> <span style="float: left;">Max Win Bets = ' + maxWinStreak + '</span> <span style="float: right;">Max Lose Streak = ' + maxLoseStreak + '</span> </span><br> <span style="float: left;">156_50%_WIN_2.0x(4-8)+4.1x(9-11)_MAX->21 Lose ' + count + '</span> <span style="float: right;">Mean bet: = ' + mean_bet.toFixed(8) + '</span><br> <span style="float: left;">count5 = ' + count5 + '</span> <span style="float: right;">count14 = ' + count14 + '</span><br> <span style="float: left;">count6 = ' + count6 + '</span> <span style="float: right;">count15 = ' + count15 + '</span><br> <span style="float: left;">count7 = ' + count7 + '</span> <span style="float: right;">count16 = ' + count16 + '</span><br> <span style="float: left;">count8 = ' + count8 + '</span> <span style="float: right;">count17 = ' + count17 + '</span><br> <span style="float: left;">count9 = ' + count9 + '</span> <span style="float: right;">count18 = ' + count18 + '</span><br> <span style="float: left;">count10 = ' + count10 + '</span> <span style="float: right;">count19 = ' + count19 + '</span><br> <span style="float: left;">count11 = ' + count11 + '</span> <span style="float: right;">count20 = ' + count20 + '</span><br> <span style="float: left;">count12 = ' + count12 + '</span> <span style="float: right;">count21 = ' + count21 + '</span><br> <span style="float: left;">count13 = ' + count13 + '</span> <span style="float: right;">count22 = ' + count22 + '</span>' );
+					updateChart(bet, profit, color);
+					if (betAmount >= balance) {
+						stop();
+						$('#notification').html('You lose');
+						return;
+					} else {
+						if (overBalance != 0 && balance >= overBalance) {
+							stop();
+							$('#notification').html('Over balance');
+							return;
+						} else if (underBalance != 0 && balance <= underBalance) {
+							stop();
+							$('#notification').html('Under balance');
+							return;
+						} else 
+						{
+							if(FAKTOR==0)
+							{
+                                if (data.gameResult === 'win') {
+                                    
+                                    if (bet % Math.floor((Math.random() * (5 - 1 + 1)) + 1) === 0) {
+                                        prediction = Math.floor((Math.random() * (50- 50 + 1)) + 50);
+                                        direction = 'under';
+                                    } else {
+                                        prediction = Math.floor((Math.random() * (49 - 49 + 1)) + 49);
+                                        direction = 'over';
+                                    }
+									if (winStreak%1==0)
+									//{ betAmount = betAmount + betAmount;}
+									{betAmount = basebetAmount;state=1;}
+										if(betAmount<=basebetAmount/2) // Min BetAmaunt
+										{betAmount=basebetAmount/2;}
+								
+                                }
+								else {
+                                   if (loseStreak%1==0)
+								  // {betAmount = basebetAmount;state=1;}
+                                   { betAmount = betAmount + betAmount;}
+									if (bet % Math.floor((Math.random() * (5 - 1 + 1)) + 1) === 0) {
+                                        prediction = Math.floor((Math.random() * (50- 50 + 1)) + 50);
+                                        direction = 'under';
+                                    } else {
+                                        prediction = Math.floor((Math.random() * (49 - 49 + 1)) + 49);
+                                        direction = 'over';
+                                    }
+							   }
+							}
+                               }
+                               }  
+							   //(5.....8)
+							//if( loseStreak >= 6)
+							if(( loseStreak >= 4)&&(loseStreak<=8))
+							//{betAmount=basebetAmount;
+							{betAmount=2.0*betAmount;
+						//targetProfit=largestProfit+ 5*basebetAmount;
+							target =0;
+							FAKTOR=0;
+							}
+							
+							if(( loseStreak >= 9)&&(loseStreak<=11))
+							//{betAmount=basebetAmount;
+							{betAmount=4.1*betAmount;
+						//targetProfit=largestProfit+ 5*basebetAmount;
+							target =0;
+							FAKTOR=0;
+							}
+							
+								//if( loseStreak >= 6)
+							if( loseStreak >= 12)
+							{betAmount=1.02*betAmount;
+							//{betAmount=0.25*betAmount;
+						//targetProfit=largestProfit+ 5*basebetAmount;
+							if(state==1)
+							{count++; state=0;}
+							target =0;
+							FAKTOR=0;
+							}						
+							
+							mean_bet=bet/count;
+							win_lose= win/lose;
+							//lowerlimit=largestBalance-largestBalance*0.001;   //0.1%
+							
+						/*	if(balance<=lowerlimit)
+							{
+								betAmount=basebetAmount;
+								largestProfit=profit;
+							targetProfit=largestProfit+ 7*basebetAmount;
+							target =0;
+							FAKTOR=0;
+								}
+								*/
+								
+							
+							
+											
+							//*******************************
+					/*	//if (profit<=(targetProfit-targetProfit*0.0005)) 
+						if (profitt<=0.05)
+							{
+								
+                                  	betAmount=basebetAmount;
+									targetProfit=profit+ 5*basebetAmount;
+									target =0;
+							FAKTOR=0;
+							}
+							*/
+							
+				       doBet();
+			       } else {
+				       randomizeSeed();
+				       setInterval(doBet(), 1e3);
+			       }
+			},
+			error: function (xhr, ajaxOptions, throwagerednError) {
+				randomizeSeed();
+				setInterval(doBet(), 1e3);
+			},
+			timeout: function (xhr, ajaxOptions, throwagerednError) {
+				randomizeSeed();
+				setInterval(doBet(), 1e3);
+			},
+			abetort: function (xhr, ajaxOptions, throwagerednError) {
+				randomizeSeed();
+				setInterval(doBet(), 1e3);
+			}
+		});
+	} else {
+		$('#notification').html('Bot has stopped');
+		return;
+	}
+}
+function generateSeed(length) {
+  let seed = '';
+  const charset = 'abcdef0123456789';
+  const array = new Uint32Array(length);
+  window.crypto.getRandomValues(array);
+  for (const val of array) {
+    seed += charset.charAt(val % 11);
+  }
+  return seed;
+}
+function generateClientSeed() {
+  return generateSeed(32);
+}
+/*V1 !!!    
+MINING SCRIPT  GOOOOOD with Limit
+*/
